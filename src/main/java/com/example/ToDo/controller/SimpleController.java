@@ -11,4 +11,9 @@ public class SimpleController {
     public String index() {
         return "Hello world";
     }
+
+    @GetMapping("/")
+    public String a() {
+        return "I'm iron man";
+    }
 }
