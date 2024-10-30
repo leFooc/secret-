@@ -12,7 +12,7 @@ pipeline {
 
                 // Maven install dependencies
 
-                sh '"./mvnw" install' ~/.gitconfig
+                sh '"./mvnw" install'
                 // Maven build
                 sh '"./mvnw" spring-boot:run'
             }
