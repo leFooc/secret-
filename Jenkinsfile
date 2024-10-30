@@ -14,7 +14,7 @@ pipeline {
 
                 sh '"./mvnw" install'
                 // Maven build
-                sh '"./mvnw" spring-boot:run'
+                sh '"./mvnw" site'
             }
         }
 
