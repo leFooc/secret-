@@ -14,6 +14,7 @@ pipeline {
             post{
                 success{
                     archiveArtifacts artifacts: '**/target/*.war'
+                    sh 'ls -l'
                 }
             }
         }
@@ -24,7 +25,12 @@ pipeline {
         }
         stage('Deploy') {
             steps{
-                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.21.0.2')], contextPath: null, war: '**/*.war'
+              script{
+                withCredentials([sshUserPrivateKey(credentialsId: 'tomcatKey',keyFileVariable:'myKey',usernameVariable:'root')]){
+                  def remote = [name:'lcfc21b43f19',host:'172.21.0.2',user:root,identityFile:myKey,allowAnyHosts:true]
+                  sshPut remote: remote, from: '**/*.war', into '/usr/local/tomcat/webapps/.'
+                }
+              }
             }
         }
     }
