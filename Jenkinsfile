@@ -29,18 +29,19 @@ pipeline {
         }
         stage('Deploy') {
             steps{
-              //deploy adapters: [tomcat9(credentialsId: '1', path: '', url: 'http://172.21.0.2:8080/')], contextPath: null, war: '**/*.war'
+                  //deploy adapters: [tomcat9(credentialsId: '1', path: '', url: 'http://172.21.0.2:8080/')], contextPath: null, war: '**/*.war'
+                  script {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey', assphraseVariable: 'pass', usernameVariable: 'userName')]) {
+                            // some block
+                            def remote=[name:'test',host:'172.21.0.2',user:userName,identityFile:mykey,allowAnyHosts:true]
 
-                withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey', assphraseVariable: 'pass', usernameVariable: 'userName')]) {
-                    // some block
-                    def remote=[name:'test',host:'172.21.0.2',user:userName,identityFile:mykey,allowAnyHosts:true]
+                            sshCommand remote: remote, command: "ls -lrt"
 
-                    sshCommand remote: remote, command: "ls -lrt"
-
-                    writeFile file:'abc.sh', text: 'ls -lrt'
-                    sshScript remote: remote, script: 'abc.sh'
-                    //sshPut remote: remote, from 'target/*.war', into '/opt/tomcat/webapps/.'
-              }
+                            writeFile file:'abc.sh', text: 'ls -lrt'
+                            sshScript remote: remote, script: 'abc.sh'
+                            //sshPut remote: remote, from 'target/*.war', into '/opt/tomcat/webapps/.'
+                        }
+                  }
             }
         }
     }
