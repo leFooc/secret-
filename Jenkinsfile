@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy') {
             steps{
                 echo ">>> Deploy"
-                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.21.0.2:8080')], contextPath: null, war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.21.0.2:8080')], contextPath: '/app', war: '**/*.war'
 //                   script {
 //                         withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey', passphraseVariable: '', usernameVariable: 'root')]) {
 //                             // some block
