@@ -31,11 +31,9 @@ pipeline {
             steps{
               //deploy adapters: [tomcat9(credentialsId: '1', path: '', url: 'http://172.21.0.2:8080/')], contextPath: null, war: '**/*.war'
 
-                withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey',
-                passphraseVariable: 'pass', usernameVariable: 'userName')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey', assphraseVariable: 'pass', usernameVariable: 'userName')]) {
                     // some block
-                    def remote=[name:'test',host:'172.21.0.2',user:userName,
-                    identityFile:mykey,allowAnyHosts:true]
+                    def remote=[name:'test',host:'172.21.0.2',user:userName,identityFile:mykey,allowAnyHosts:true]
 
                     sshCommand remote: remote, command: "ls -lrt"
 
