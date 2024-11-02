@@ -31,7 +31,7 @@ pipeline {
             steps{
                   //deploy adapters: [tomcat9(credentialsId: '1', path: '', url: 'http://172.21.0.2:8080/')], contextPath: null, war: '**/*.war'
                   script {
-                        withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey', assphraseVariable: 'pass', usernameVariable: 'userName')]) {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey', assphraseVariable: '', usernameVariable: 'userName')]) {
                             // some block
                             def remote=[name:'test',host:'172.21.0.2',user:userName,identityFile:mykey,allowAnyHosts:true]
 
@@ -39,6 +39,7 @@ pipeline {
 
                             writeFile file:'abc.sh', text: 'ls -lrt'
                             sshScript remote: remote, script: 'abc.sh'
+                            sshCommand remote: remote, command: "ls -lrt /usr/local/tomcat/webapps"
                             //sshPut remote: remote, from 'target/*.war', into '/opt/tomcat/webapps/.'
                         }
                   }
