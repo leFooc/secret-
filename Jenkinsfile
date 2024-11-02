@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools{
-        maven 'mAvEn'
+        maven 'maven'
         jdk 'jdk'
     }
 
@@ -29,7 +29,8 @@ pipeline {
         }
         stage('Deploy') {
             steps{
-                  //deploy adapters: [tomcat9(credentialsId: '1', path: '', url: 'http://172.21.0.2:8080/')], contextPath: null, war: '**/*.war'
+                echo ">>> Deploy"
+                deploy adapters: [tomcat9(credentialsId: 'tomcat-deployer', path: '', url: 'http:172.21.0.2:8080')], contextPath: null, war: '*/.war'
 //                   script {
 //                         withCredentials([sshUserPrivateKey(credentialsId: 'tomcatSSH', keyFileVariable: 'mykey', passphraseVariable: '', usernameVariable: 'root')]) {
 //                             // some block
@@ -43,7 +44,7 @@ pipeline {
 //                             //sshPut remote: remote, from 'target/*.war', into '/opt/tomcat/webapps/.'
 //                         }
 //                   }
-                   sh "scp -v -o StrictHostKeyChecking=no **/*.war root@172.21.0.2:/usr/local/tomcat/webapps/"
+                   //sh "scp -v -o StrictHostKeyChecking=no **/*.war root@172.21.0.2:/usr/local/tomcat/webapps/"
             }
         }
     }
